@@ -1,6 +1,6 @@
 @PharmaProject_HostAddress = http://localhost:5083
 
-GET {{PharmaProject_HostAddress}}/weatherforecast/
+GET http://localhost:5083/api/Medicine
 Accept: application/json
 
 ###
