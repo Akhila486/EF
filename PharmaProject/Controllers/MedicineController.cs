@@ -16,9 +16,17 @@ namespace PharmaProject.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Medicine>>> getMedicines()
         {
+            var data = _dbContext.Medicines;
+            var data1 = test();
             return await _dbContext.Medicines.ToListAsync();
+           
+        }
+        public String test()
+        {
+            return "Akhila";
         }
     }
 }
