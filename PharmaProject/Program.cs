@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmaProject.Data;
+using PharmaProject.Services;
+using PharmaProject.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MedicineDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HospitalConnection")));
 
+builder.Services.AddTransient<IMedicine, MedicineService>();
 builder.Services.AddControllers();
 
 // 🔽 Add Swagger services

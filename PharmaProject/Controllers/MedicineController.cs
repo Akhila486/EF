@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PharmaProject.Data;
 using PharmaProject.Models;
+using PharmaProject.Services;
+using PharmaProject.Services.Interfaces;
 
 namespace PharmaProject.Controllers
 {
@@ -10,19 +12,17 @@ namespace PharmaProject.Controllers
     [ApiController]
     public class MedicineController : ControllerBase
     {
-        private readonly MedicineDBContext _dbContext;
-        public MedicineController(MedicineDBContext dbContext)
+        private readonly IMedicine _service;
+        public MedicineController(IMedicine service)
         {
-            _dbContext = dbContext;
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Medicine>>> getMedicines()
+        public async Task<ActionResult<IEnumerable<ResponseMedicine>>> getMedicines()
         {
-            var data = _dbContext.Medicines;
-
-            return await _dbContext.Medicines.ToListAsync();
-           
+            var response = await _service.GetMedicines();
+            return Ok(response);
         }
         
     }
