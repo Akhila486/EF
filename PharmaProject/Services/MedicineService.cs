@@ -24,9 +24,10 @@ namespace PharmaProject.Services
             var response = _dbContext.Medicines.ToList();
             foreach(var data in response)
             {
-
                 rm.Name = data.Name;
                 rm.Price = data.Price;
+                rm.ExpiredDate = data.ExpiredDate;
+                rm.Id = data.Id;
             }
             //getting data
             return rm;
