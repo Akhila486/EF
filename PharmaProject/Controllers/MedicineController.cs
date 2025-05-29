@@ -20,7 +20,7 @@ namespace PharmaProject.Controllers
         public async Task<ActionResult<IEnumerable<Medicine>>> getMedicines()
         {
             var data = _dbContext.Medicines;
-            var data1 = test();
+
             return await _dbContext.Medicines.ToListAsync();
            
         }
