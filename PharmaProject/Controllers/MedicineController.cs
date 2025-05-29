@@ -24,9 +24,6 @@ namespace PharmaProject.Controllers
             return await _dbContext.Medicines.ToListAsync();
            
         }
-        public String test()
-        {
-            return "Akhila";
-        }
+        
     }
 }
