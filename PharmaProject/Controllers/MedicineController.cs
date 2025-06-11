@@ -18,12 +18,19 @@ namespace PharmaProject.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResponseMedicine>>> getMedicines()
+        [HttpGet("getMedicines")]
+        public async Task<IActionResult> getMedicines()
         {
-            var response = await _service.GetMedicines();
+            var response = _service.GetMedicines();
             return Ok(response);
         }
-        
+
+        [HttpGet("getMedicinesById")]
+        public async Task<IActionResult> getMedicinesById(int id)
+        {
+            var response = _service.GetMedicineById(id);
+            return Ok(response);
+        }
+
     }
 }

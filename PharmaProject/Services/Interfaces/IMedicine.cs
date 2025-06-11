@@ -4,7 +4,7 @@ namespace PharmaProject.Services.Interfaces
 {
     public interface IMedicine
     {
-        Task<IEnumerable<ResponseMedicine>> GetMedicines();
+        List<Medicine> GetMedicines();
         Medicine GetMedicineById(int id);
     }
 }

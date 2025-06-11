@@ -15,22 +15,49 @@ namespace PharmaProject.Services
         }
         public Medicine GetMedicineById(int id)
         {
-            throw new NotImplementedException();
+            //get the context(ado.net connect to server)
+           //Medicine medicineRecord = new Medicine();
+            var response = _dbContext.Medicines.ToList();
+            //understanding the below LINQ and lambda expression with the help of for each code
+           /* foreach(var m  in response)
+            {
+                if(m.Id == id)
+                {
+                    medicineRecord = m;
+                }
+
+            }*/
+
+            //get the data based on ID from the context
+           Medicine medicineRecord =response.FirstOrDefault(m => m.Id == id);
+
+            //return the record with given ID
+            return medicineRecord;
         }
 
-        public async Task<ResponseMedicine> GetMedicines()
+
+
+       public List<Medicine> GetMedicines()
         {
-            ResponseMedicine rm = new ResponseMedicine();
+            
+            List<Medicine> medicines = new List<Medicine>();
             var response = _dbContext.Medicines.ToList();
-            foreach(var data in response)
+            foreach (var data in response)
             {
-                rm.Name = data.Name;
+                Medicine rm = new Medicine();
+                //rm.Name = data.Name;
                 rm.Price = data.Price;
                 rm.ExpiredDate = data.ExpiredDate;
                 rm.Id = data.Id;
+              //  rm.Customer
+
+                //adding item into list
+                medicines.Add(rm);
+
+
             }
             //getting data
-            return rm;
+            return medicines;
         }
     }
 }
