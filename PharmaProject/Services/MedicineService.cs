@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PharmaProject.Data;
 using PharmaProject.Models;
 using PharmaProject.Services.Interfaces;
@@ -35,6 +37,21 @@ namespace PharmaProject.Services
             return medicineRecord;
         }
 
+        //write a insert or post call 
+        ID=10
+            name="paracetamol"
+            price=50
+            Quantity=1
+            customer="Vineela"
+            customerID=10
+
+            
+            public List<Medicine> PostMedicineByID(int id)
+        {
+            _dbContext.Medicines.ToList()= var response;
+            Medicine medicineRecord = response.FirstOrDefault(m => m.Id == id);
+
+        }
 
 
        public List<Medicine> GetMedicines()
