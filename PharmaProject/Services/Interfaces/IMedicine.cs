@@ -1,4 +1,5 @@
-﻿using PharmaProject.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PharmaProject.Models;
 
 namespace PharmaProject.Services.Interfaces
 {
@@ -6,5 +7,9 @@ namespace PharmaProject.Services.Interfaces
     {
         List<Medicine> GetMedicines();
         Medicine GetMedicineById(int id);
+
+        Response CreateMedicine(Medicine NewMedicine);
+        Response DeleteMedicine(int id);
+
     }
 }

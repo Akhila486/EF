@@ -37,23 +37,6 @@ namespace PharmaProject.Services
             return medicineRecord;
         }
 
-        //write a insert or post call 
-        ID=10
-            name="paracetamol"
-            price=50
-            Quantity=1
-            customer="Vineela"
-            customerID=10
-
-            
-            public List<Medicine> PostMedicineByID(int id)
-        {
-            _dbContext.Medicines.ToList()= var response;
-            Medicine medicineRecord = response.FirstOrDefault(m => m.Id == id);
-
-        }
-
-
        public List<Medicine> GetMedicines()
         {
             
@@ -75,6 +58,52 @@ namespace PharmaProject.Services
             }
             //getting data
             return medicines;
+        }
+
+        public Models.Response CreateMedicine(Medicine NewMedicine)
+        {
+            var response = new Models.Response();
+
+            // Get the context
+           var db =  _dbContext.Medicines;
+
+            // enter the new medicine values as parameters
+
+            db.Add(NewMedicine);    
+           int issaved = _dbContext.SaveChanges();
+
+            if(issaved >0)
+            {
+                response.Message = "new medicine inserted sucessfully";
+                response.statusCode = System.Net.HttpStatusCode.Created;
+            }
+            //pass each value to corresponding database column by mapping
+
+            //save the data to database by a button click
+
+
+            return response;
+            
+        }
+
+        public Models.Response DeleteMedicine(int id)
+        {
+            var response = new Models.Response();
+            var mR1 = _dbContext.Medicines.ToList();
+            if (mR1 != null)
+            {
+                Medicine medicineRecord1 = mR1.FirstOrDefault(m => m.Id == id);
+
+                _dbContext.Medicines.Remove(medicineRecord1);
+                int isDeleted = _dbContext.SaveChanges();
+
+                if (isDeleted > 0)
+                {
+                    response.Message = "Medicine Deleted Successfully";
+                    response.statusCode = System.Net.HttpStatusCode.OK;
+                }
+            }
+            return response;
         }
     }
 }

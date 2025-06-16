@@ -10,6 +10,7 @@ builder.Services.AddDbContext<MedicineDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HospitalConnection")));
 
 builder.Services.AddTransient<IMedicine, MedicineService>();
+//builder.Services.
 builder.Services.AddControllers();
 
 // 🔽 Add Swagger services

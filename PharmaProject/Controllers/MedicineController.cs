@@ -32,10 +32,17 @@ namespace PharmaProject.Controllers
             return Ok(response);
         }
 
-        [HttpPost("PostMedicinesByID")]
-        public async Task<IActionResult> PostmedicinesByID()
+        [HttpPost("CreateMedicine")]
+        public async Task<IActionResult> CreateMedicine(Medicine medicine)
         {
-            var response = _service.PostMedicinesByID();
+            var response = _service.CreateMedicine(medicine);
+            return Ok(response);
+        }
+
+        [HttpPost("DeleteMedicine")]
+        public async Task<IActionResult> DeleteMedicine(int id)
+        {
+            var response= _service.DeleteMedicine(id);
             return Ok(response);
         }
 
