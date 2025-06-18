@@ -1,7 +1,7 @@
 @PharmaADO_HostAddress = http://localhost:5275
 
 //GET {{PharmaADO_HostAddress}}/api/Medicine
-GET http://localhost:5275/api/Medicine
+//GET http://localhost:5275/api/Medicine
 Accept: application/json
 
 ###
