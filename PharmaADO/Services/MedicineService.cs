@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PharmaADO.DatabaseHelper;
 using PharmaADO.Models;
 using PharmaADO.Services.Interfaces;
@@ -37,8 +38,9 @@ namespace PharmaADO.Services
                         {
                             akhila = new Medicine
                             {
-                                Id = reader.GetInt32(0),
-                                Name = reader.GetString(1)
+
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = reader["Name"].ToString()
 
                             };
                         }
@@ -49,10 +51,11 @@ namespace PharmaADO.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine( ex.Message);
+                Console.WriteLine(ex.Message);
             }
             return akhila;
             //return akhila == null ? null : new Medicine();
+
         }
         public List<Medicine> GetMedicines()
         {
