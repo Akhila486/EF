@@ -23,5 +23,13 @@ namespace PharmaADO.Controllers
             var response = _service.GetMedicines();
             return Ok(response);
         }
+
+        [HttpGet("GetMedicineById")]
+        public async Task<IActionResult> AkhilaMethod(int id)
+        {
+            var response = _service.GetMedicineById(id);
+            return Ok(response);
+
+        }
     }
 }
