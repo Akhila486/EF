@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Http.HttpResults;
 using PharmaADO.DatabaseHelper;
 using PharmaADO.Models;
@@ -28,25 +29,26 @@ namespace PharmaADO.Services
                     //command to connect to database
                     string query = "select * from [AdventureWorks2022].[dbo].[Medicines] where Id=@medicine_id";
 
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@medicine_id", id);
-                    //execute the command
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        if (reader.Read())
+
+                        cmd.Parameters.AddWithValue("@medicine_id", SqlDbType.Int).Value = id;
+                        //execute the command
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            akhila = new Medicine
+                            if (reader.Read())
                             {
+                                akhila = new Medicine
+                                {
 
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Name = reader["Name"].ToString()
+                                    Id = Convert.ToInt32(reader["Id"]),
+                                    Name = reader["Name"].ToString()
 
-                            };
+                                };
+                            }
                         }
                     }
 
-                   
                 }
             }
             catch (Exception ex)
