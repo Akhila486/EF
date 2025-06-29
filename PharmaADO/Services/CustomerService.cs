@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿
+using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Http.HttpResults;
 using PharmaADO.DatabaseHelper;
@@ -6,18 +7,19 @@ using PharmaADO.Models;
 using PharmaADO.Services.Interfaces;
 
 namespace PharmaADO.Services
+
 {
-    public class MedicineService : IMedicine
+    public class CustomerService:ICustomer
     {
         private readonly DBHelper _dbHelper;
-        public MedicineService(DBHelper dBHelper)
+        public CustomerService(DBHelper dBHelper)
         {
             _dbHelper = dBHelper;
         }
 
-        public Medicine GetMedicineById(int id)
+        public Customer GetCustomerById(int id)
         {
-            Medicine akhila = null;
+            Customer akhila = null;
             SqlConnection conn = null;
             SqlCommand cmd = null;
             SqlDataAdapter adapter = null;
@@ -28,10 +30,10 @@ namespace PharmaADO.Services
                 conn = _dbHelper.GetConnection();
                 conn.Open();
 
-                string query = "SELECT * FROM [AdventureWorks2022].[dbo].[Medicines] WHERE Id = @medicine_id";
+                string query = "SELECT * FROM [AdventureWorks2022].[dbo].[Customers] WHERE Id = @customer_id";
 
                 cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@medicine_id", id);
+                cmd.Parameters.AddWithValue("@customer_id", id);
 
                 adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(ds);
@@ -40,7 +42,7 @@ namespace PharmaADO.Services
                 {
                     DataRow row = ds.Tables[0].Rows[0];
 
-                    akhila = new Medicine
+                    akhila = new Customer
                     {
                         Id = row["Id"] != DBNull.Value ? Convert.ToInt32(row["Id"]) : 0,
                         Name = row["Name"] != DBNull.Value ? row["Name"].ToString() : null
@@ -55,16 +57,16 @@ namespace PharmaADO.Services
             //return akhila == null ? null : new Medicine();
 
         }
-        public List<Medicine> GetMedicines()
+        public List<Customer> GetCustomers()
         {
-            var medicines = new List<Medicine>();
+            var customers = new List<Customer>();
             using (SqlConnection conn = _dbHelper.GetConnection())
             {
                 //open the connection
                 conn.Open();
 
                 //give the command
-                string command = "select * from [AdventureWorks2022].[dbo].[Medicines]";
+                string command = "select * from [AdventureWorks2022].[dbo].[Customers]";
                 SqlCommand cmd = new SqlCommand(command, conn);
 
                 //execute and read the data 
@@ -72,7 +74,7 @@ namespace PharmaADO.Services
                 {
                     while (reader.Read())
                     {
-                        medicines.Add(new Medicine
+                        customers.Add(new Customer
                         {
                             Id = reader.GetInt32(0),
                             Name = reader.GetString(1),
@@ -83,7 +85,7 @@ namespace PharmaADO.Services
 
                 }
                 //return the data
-                return medicines;
+                return customers;
             }
         }
     }

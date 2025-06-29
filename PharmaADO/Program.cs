@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<DBHelper>();
 builder.Services.AddScoped<IMedicine, MedicineService>();
+builder.Services.AddScoped<ICustomer, CustomerService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
