@@ -10,7 +10,7 @@
         public DateTime ExpiredDate { get; set; }
         public DateTime ManufacturingDate { get; set; }
 
-        public List<Customer> Customer { get; set; }
+       // public List<Customer> Customer { get; set; }
         public int CustomerID { get; set; }
     }
 }

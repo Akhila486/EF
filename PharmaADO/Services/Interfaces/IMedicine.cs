@@ -5,5 +5,11 @@ namespace PharmaADO.Services.Interfaces
     {
         List<Medicine> GetMedicines();
         Medicine GetMedicineById(int id);
+
+        string CreateMedicines(Medicine medicine);
+
+        string UpdateMedicines(Medicine medicine);
+
+        String DeleteMedicineById(int id);
     }
 }

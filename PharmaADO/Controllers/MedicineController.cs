@@ -31,5 +31,26 @@ namespace PharmaADO.Controllers
             return Ok(response);
 
         }
+
+        [HttpPost("CreateMedicines")]
+        public async Task<IActionResult> CreateMedicines(Medicine medicine)
+        {
+            var response = _service.CreateMedicines(medicine);
+            return Ok(response);
+        }
+
+        [HttpPost("UpdateMedicines")]
+        public async Task<IActionResult> UpdateMedicines(Medicine medicine)
+        {
+            var response = _service.UpdateMedicines(medicine);
+            return Ok(response);
+        }
+
+        [HttpDeleteAttribute("DeleteMedicineById")]
+        public async Task<IActionResult> DeleteMedicineById(int id)
+        {
+            var response = _service.DeleteMedicineById(id);
+            return Ok(response);
+        }
     }
 }

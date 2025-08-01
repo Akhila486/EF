@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http.HttpResults;
 using PharmaADO.DatabaseHelper;
 using PharmaADO.Models;
@@ -14,6 +15,103 @@ namespace PharmaADO.Services
         {
             _dbHelper = dBHelper;
         }
+
+        public String CreateMedicines(Medicine medicine)
+        {
+            int ret = 0;
+            string retMessage = "";
+            //open the database connection
+
+            using (SqlConnection conn = _dbHelper.GetConnection())
+            {
+                conn.Open();
+                string insertQuery = @"INSERT INTO [dbo].[Medicines]
+            (Name
+            ,Price
+            ,Quantity
+            ,Manufacturer
+            ,ExpiredDate
+            ,ManufacturingDate
+            ,CustomerID)
+              VALUES (@name, @price, @quantity, @Manufacturer, @ed, @md, @ci)
+              select SCOPE_IDENTITY()";
+
+                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = medicine.Name;
+                    cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = medicine.Price;
+                    cmd.Parameters.Add("@quantity", SqlDbType.Int).Value = medicine.Quantity;
+                    cmd.Parameters.Add("@Manufacturer", SqlDbType.NVarChar, 100).Value = medicine.Manufacturer;
+                    cmd.Parameters.Add("@ed", SqlDbType.DateTime2).Value = medicine.ExpiredDate;
+                    cmd.Parameters.Add("@md", SqlDbType.DateTime2).Value = medicine.ManufacturingDate;
+                    cmd.Parameters.Add("@ci", SqlDbType.Int).Value = medicine.CustomerID;
+                    //Console.WriteLine();
+                    ret = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (ret>0)
+                    {
+                        //retMessage = "Record Inserted successfully with Id="+ret +"hello";
+                        retMessage = $"Record Inserted successfully with Id={ret} hello" ;
+                    }
+                }
+            }
+
+            //create command and execute will post the data to database
+            return retMessage;
+
+        }
+
+        
+
+        /*
+public int CreateMedicines(Medicine medicine)
+{
+   if (medicine == null)
+       throw new ArgumentNullException(nameof(medicine));
+
+   int ret = 0;
+
+   if (_dbHelper == null)
+       throw new InvalidOperationException("_dbHelper is not initialized.");
+
+   using (SqlConnection conn = _dbHelper.GetConnection())
+   {
+       conn.Open();
+       string insertQuery = @"
+       INSERT INTO [dbo].[Medicines] 
+       (Name, Price, Quantity, Manufacturer, ExpiredDate, ManufacturingDate, CustomerID)
+       VALUES (@name, @price, @quantity, @Manufacturer, @ed, @md, @ci)";
+
+       using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+       {
+           cmd.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = medicine.Name ?? (object)DBNull.Value;
+           cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = medicine.Price;
+           cmd.Parameters.Add("@quantity", SqlDbType.Int).Value = medicine.Quantity;
+           cmd.Parameters.Add("@Manufacturer", SqlDbType.NVarChar, 100).Value = medicine.Manufacturer ?? (object)DBNull.Value;
+           cmd.Parameters.Add("@ed", SqlDbType.DateTime2).Value = medicine.ExpiredDate;
+           cmd.Parameters.Add("@md", SqlDbType.DateTime2).Value = medicine.ManufacturingDate;
+           cmd.Parameters.Add("@ci", SqlDbType.Int).Value = medicine.CustomerID;
+
+           // Get the inserted ID
+           // ret = (int)cmd.ExecuteScalar()
+
+
+           object result = cmd.ExecuteScalar();
+           if (result != null)
+           {
+               ret = Convert.ToInt32(result);
+           }
+           else
+           {
+               // Handle the case where the ID isn't returned or something went wrong
+               ret = 0;  // You could throw an exception here if the insert failed.
+           }
+       }
+   }
+
+   return ret;
+}
+
+*/
 
         public Medicine GetMedicineById(int id)
         {
@@ -55,6 +153,28 @@ namespace PharmaADO.Services
             //return akhila == null ? null : new Medicine();
 
         }
+
+
+        public String DeleteMedicineById(int id)
+        {
+            string retMessage = " ";
+            using (SqlConnection conn = _dbHelper.GetConnection())
+            {
+                conn.Open();
+
+
+                string command = "Delete from [AdventureWorks2022].[dbo].[Medicines] where Id=@id";
+                SqlCommand cmd = new SqlCommand(command, conn);
+                cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    retMessage = $"Updated medicine successfully for id={id}";
+                }
+
+                return retMessage;
+            }
+        }
         public List<Medicine> GetMedicines()
         {
             var medicines = new List<Medicine>();
@@ -85,6 +205,33 @@ namespace PharmaADO.Services
                 //return the data
                 return medicines;
             }
+        }
+
+        public string UpdateMedicines(Medicine medicine)
+        {
+            string retMessage = "";
+            string query = @"UPDATE [dbo].[Medicines]
+            SET Name=@name,Price = @price where Id=@id";
+            try
+            {
+                using SqlConnection conn = _dbHelper.GetConnection();
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = medicine.Name;
+                cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = medicine.Price;
+                cmd.Parameters.Add("@id", SqlDbType.Int).Value = medicine.Id;
+                conn.Open();
+                int rowsAffected=cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    retMessage = $"Updated medicine successfully for id={medicine.Id}";
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return retMessage;
         }
     }
 }
