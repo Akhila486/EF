@@ -10,7 +10,7 @@ using PharmaADO.Services.Interfaces;
 namespace PharmaADO.Services
 
 {
-    public class CustomerService:ICustomer
+    public class CustomerService : ICustomer
     {
         private readonly DBHelper _dbHelper;
         public CustomerService(DBHelper dBHelper)
@@ -96,7 +96,7 @@ namespace PharmaADO.Services
             string retMessage = "";
             //open the database connection
             string jsonData = JsonSerializer.Serialize(customer, new JsonSerializerOptions { WriteIndented = true });
-       
+
             using (SqlConnection conn = _dbHelper.GetConnection())
             {
                 conn.Open();
@@ -158,14 +158,15 @@ namespace PharmaADO.Services
         public string createCustomerWithMedicine(Customer customer)
         {
             int customerId = 0;
+            string retMessage=null;
             //open connection
             try
             {
                 using SqlConnection conn = _dbHelper.GetConnection();
                 conn.Open();
-                
+
                 //begin transactions
-                using var transaction= conn.BeginTransaction();
+                using var transaction = conn.BeginTransaction();
 
                 //customer insert
                 string insertCustomer = @"INSERT INTO [dbo].[Customers]
@@ -184,10 +185,6 @@ namespace PharmaADO.Services
 
                 if (customer.Medicines.Any())
                 {
-                 foreach (var m in customer.Medicines)
-                    {
-
-                    }
 
                     //insert medicines
                     string insertQuery = @"INSERT INTO [dbo].[Medicines]
@@ -201,28 +198,34 @@ namespace PharmaADO.Services
               VALUES (@name, @price, @quantity, @Manufacturer, @ed, @md, @ci)
               select SCOPE_IDENTITY()";
 
-
-                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                    foreach (var medicine in customer.Medicines)
                     {
-                        cmd.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = medicine.Name;
-                        cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = medicine.Price;
-                        cmd.Parameters.Add("@quantity", SqlDbType.Int).Value = medicine.Quantity;
-                        cmd.Parameters.Add("@Manufacturer", SqlDbType.NVarChar, 100).Value = medicine.Manufacturer;
-                        cmd.Parameters.Add("@ed", SqlDbType.DateTime2).Value = medicine.ExpiredDate;
-                        cmd.Parameters.Add("@md", SqlDbType.DateTime2).Value = medicine.ManufacturingDate;
-                        cmd.Parameters.Add("@ci", SqlDbType.Int).Value = customerId;
-                        //Console.WriteLine();
-                        ret = Convert.ToInt32(cmd.ExecuteScalar());
-
-                        //transaction commit
-
+                        using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                        {
+                            cmd.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = medicine.Name;
+                            cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = medicine.Price;
+                            cmd.Parameters.Add("@quantity", SqlDbType.Int).Value = medicine.Quantity;
+                            cmd.Parameters.Add("@Manufacturer", SqlDbType.NVarChar, 100).Value = medicine.Manufacturer;
+                            cmd.Parameters.Add("@ed", SqlDbType.DateTime2).Value = medicine.ExpiredDate;
+                            cmd.Parameters.Add("@md", SqlDbType.DateTime2).Value = medicine.ManufacturingDate;
+                            cmd.Parameters.Add("@ci", SqlDbType.Int).Value = customerId;
+                            //Console.WriteLine();
+                            int ret = Convert.ToInt32(cmd.ExecuteScalar());
+                            if (ret > 0)
+                            {
+                                retMessage = "record inserted successfully";
+                            }
+                                                        //transaction commit
+                        }
                     }
                 }
+            }
+
             catch (Exception ex)
             {
             }
 
-            //return customerid with message
+            return retMessage;
         }
     }
 }
